@@ -6,8 +6,8 @@ import json
 import numpy as np
 
 # Load the YOLO model
-model = YOLO("models/yolov5SC.pt")  # Replace with your custom model path
-file_name = "results/out_yolov5.json"
+model = YOLO("models/yolov8SC.pt")  # Replace with your custom model path
+file_name = "results/out_yolov8.json"
 # Load the dataset
 dataset = load_dataset("marmal88/skin_cancer")
 label_mapping = {
@@ -76,3 +76,5 @@ with open(file_name, "w") as f:
 
 print(f"Malign/Benign Accuracy: {accuracy:.4f}")
 print("Metrics saved to:", file_name)
+
+
