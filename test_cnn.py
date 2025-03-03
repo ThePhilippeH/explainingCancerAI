@@ -6,7 +6,7 @@ import json
 import numpy as np
 
 # Load the YOLO model
-model = YOLO("models/yolov8SC.pt")  # Replace with your custom model path
+model = YOLO("yolo_weights/yolov8SC.pt")  # Replace with your custom model path
 file_name = "results/out_yolov8.json"
 # Load the dataset
 dataset = load_dataset("marmal88/skin_cancer")

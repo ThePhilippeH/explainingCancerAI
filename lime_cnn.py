@@ -5,12 +5,13 @@ import numpy as np
 import torch
 from lime import lime_image
 from skimage.segmentation import quickshift
+from skimage.segmentation import slic
 import matplotlib.pyplot as plt
 from skimage.segmentation import mark_boundaries
 import os
 
 # Load the YOLO model
-model = YOLO("models/yolov8SC.pt")  # Replace with your custom model path
+model = YOLO("yolo_weights/yolov8SC.pt")  # Replace with your custom model path
 
 # Load the dataset
 dataset = load_dataset("marmal88/skin_cancer")
@@ -25,7 +26,7 @@ label_mapping = {
 }
 
 # Apply the mapping to the 'dx' column
-test_split = dataset["test"]
+test_split = dataset["train"]
 mapped_labels = [label_mapping[label] for label in test_split["dx"]]
 test_split = test_split.add_column("malignancy", mapped_labels)
 
@@ -52,6 +53,7 @@ def predict_fn(images):
             # If YOLO does not return probabilities, create fake ones
             fake_probs = np.array([0.5, 0.5])  # Assume equal chance for both classes
             probs.append(fake_probs)
+            print("RETURNED FAKE")
 
     return np.array(probs)
 
@@ -74,8 +76,8 @@ for i, example in enumerate(test_split):
         predict_fn,
         top_labels=2,
         hide_color=0,
-        num_samples=500,  # Speed optimization
-        segmentation_fn=lambda img: quickshift(img, kernel_size=4, max_dist=200)
+        num_samples=10    ,  # Speed optimization
+        segmentation_fn=lambda img: slic(img, n_segments=300, compactness=5, sigma=1)
     )
 
     # Ensure a mask is generated
