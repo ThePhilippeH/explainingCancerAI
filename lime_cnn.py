@@ -43,17 +43,20 @@ def preprocess_image(image):
 # Define function to get YOLO predictions for LIME
 def predict_fn(images):
     images_tensor = [torch.tensor(img).permute(2, 0, 1).unsqueeze(0) for img in images]
-    results = [model(img) for img in images_tensor]
+    results = [model(img, ) for img in images_tensor]
 
     probs = []
     for res in results:
-        if res[0].probs is not None:
-            probs.append(res[0].probs.cpu().detach().numpy())  # Extract probabilities
+        if res[0].boxes is not None:
+            # Extract confidence scores (if available)
+            conf_scores = res[0].boxes.conf.cpu().detach().numpy()
+
+            # Normalize to sum to 1 (like probabilities)
+            class_probs = conf_scores / np.sum(conf_scores) if np.sum(conf_scores) > 0 else np.zeros_like(conf_scores)
+            probs.append(class_probs)
         else:
-            # If YOLO does not return probabilities, create fake ones
-            fake_probs = np.array([0.5, 0.5])  # Assume equal chance for both classes
-            probs.append(fake_probs)
-            print("RETURNED FAKE")
+            # Fallback case
+            probs.append(np.array([0.5, 0.5]))  # Assuming binary classification
 
     return np.array(probs)
 
@@ -76,7 +79,7 @@ for i, example in enumerate(test_split):
         predict_fn,
         top_labels=2,
         hide_color=0,
-        num_samples=10    ,  # Speed optimization
+        num_samples=5    ,  # Speed optimization
         segmentation_fn=lambda img: slic(img, n_segments=300, compactness=5, sigma=1)
     )
 
