@@ -1,48 +1,20 @@
-import torch
-import numpy as np
-import cv2
-from ultralytics import YOLO
-from datasets import load_dataset
-from PIL import Image
-import matplotlib.pyplot as plt
+from YOLOv8_Explainer import yolov8_heatmap, display_images
 
-from yolo_cam.eigen_cam import EigenCAM
-from yolo_cam.utils.image import show_cam_on_image, scale_cam_image
+# Initialize the YOLOv8 Explainer with Grad-CAM
+model = yolov8_heatmap(
+    weight="yolo_weights/yolov8SC.pt",  # Path to your YOLOv8 model weights
+    conf_threshold=0.4,  # Confidence threshold for detections
+    method="GradCAM",  # Use Grad-CAM instead of EigenCAM
+    layer=[10, 12, 14, 16, 18, -3],  # Target layers for Grad-CAM
+    ratio=0.02,  # Ratio for heatmap overlay
+    show_box=True,  # Show bounding boxes on the image
+    renormalize=False,  # Do not renormalize the heatmap
+)
+for i in range(10):
+    # Generate Grad-CAM heatmaps for an image
+    images = model(
+        img_path=f"test_img/image_{i}.png",  # Path to your input image
+    )
 
-def preprocess_image(image):
-    """Converts PIL Image to tensor and normalizes it."""
-    image = image.convert("RGB")
-    image = np.array(image)
-    image = cv2.resize(image, (640, 640))  # Resize to YOLOv8 input size
-    image = image / 255.0  # Normalize5
-    image = torch.tensor(image, dtype=torch.float32).permute(2, 0, 1).unsqueeze(0)
-    return image
-
-# Load the YOLO model
-model = YOLO("yolo_weights/yolov8SC.pt")  # Replace with your model path
-model.eval()
-print(model.model)
-
-# Load dataset
-dataset = load_dataset("marmal88/skin_cancer")
-test_split = dataset["test"]
-
-# Select a sample image from dataset
-example = test_split[0]
-image = example["image"]
-rgb_img = np.array(image) / 255.0  # Normalize image for visualization
-input_tensor = preprocess_image(image)
-
-# Define target layers
-target_layers = [model.model.model[10]]  # Adjust according to YOLOv8 model structure
-
-# Apply EigenCAM
-cam = EigenCAM(model, target_layers, task='od')
-grayscale_cam = cam(rgb_img)[0, :, :]
-cam_image = show_cam_on_image(rgb_img, grayscale_cam, use_rgb=True)
-
-# Display the result
-plt.imshow(cam_image)
-plt.title("Grad-CAM using EigenCAM")
-plt.axis("off")
-plt.show()
+    # Display the results
+    display_images(images)
