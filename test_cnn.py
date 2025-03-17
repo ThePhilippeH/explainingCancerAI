@@ -7,7 +7,7 @@ import numpy as np
 
 # Load the YOLO model
 model = YOLO("yolo_weights/yolov8SC.pt")  # Replace with your custom model path
-file_name = "results/out_yolov8.json"
+# file_name = "results/out_yolov8.json"
 # Load the dataset
 dataset = load_dataset("marmal88/skin_cancer")
 label_mapping = {
@@ -37,6 +37,7 @@ ground_truth_labels = test_split["malignancy"]
 # Initialize accuracy tracking
 correct_predictions = 0
 total_predictions = 0
+true_predictions = []
 
 # Perform inference on the test set
 for i, example in enumerate(test_split):
@@ -55,11 +56,14 @@ for i, example in enumerate(test_split):
     # Update accuracy count
     if predicted_label == ground_truth:
         correct_predictions += 1
-        print("TRUE")
+        print("TRUE with label: ",i)
+        true_predictions.append(i)
+
     total_predictions += 1
 
     # Print progress
     print(f"Processed {i+1}/{len(test_split)}: Predicted = {predicted_label}, Actual = {ground_truth}")
+
 
 # Compute final accuracy
 accuracy = correct_predictions / total_predictions if total_predictions > 0 else 0.0
@@ -71,10 +75,8 @@ metrics = {
     "accuracy": accuracy
 }
 
-with open(file_name, "w") as f:
-    json.dump(metrics, f, indent=4)
-
 print(f"Malign/Benign Accuracy: {accuracy:.4f}")
 print("Metrics saved to:", file_name)
+print("The true positives: ", true_predictions)
 
 

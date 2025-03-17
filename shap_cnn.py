@@ -1,110 +1,144 @@
-import shap
 import torch
-from PIL import Image
+import torch.nn as nn
 import numpy as np
-import os
-from ultralytics import YOLO
-from datasets import load_dataset
+from PIL import Image
+import shap
 import matplotlib.pyplot as plt
-import tensorflow
+from datasets import load_dataset
 
-# Load YOLO model
+# Step 1: Casting the image to a PyTorch tensor
+class Numpy2TorchCaster(nn.Module):
+    def forward(self, x):
+        return torch.tensor(x, dtype=torch.float32).permute(2, 0, 1).unsqueeze(0)
+
+# Step 2: Core model (e.g., YOLO or any object detection model)
+class CoreModel(nn.Module):
+    def __init__(self, model):
+        super().__init__()
+        self.model = model
+
+    def forward(self, x):
+        return self.model(x)
+
+# Step 3: Non-Maximum Suppression (NMS) and score calculation
+class OD2Score(nn.Module):
+    def __init__(self, target_class, iou_threshold=0.5):
+        super().__init__()
+        self.target_class = target_class
+        self.iou_threshold = iou_threshold
+
+    def forward(self, detections):
+        boxes, scores, classes = detections
+        # Apply NMS and filter for the target class
+        filtered_boxes, filtered_scores = self._apply_nms(boxes, scores, classes)
+        return filtered_boxes, filtered_scores
+
+    def _apply_nms(self, boxes, scores, classes):
+        # Implement NMS logic here
+        # For simplicity, we assume the model already applies NMS
+        return boxes, scores
+# Step 4: Superpixel segmentation
+class SuperPixler(nn.Module):
+    def __init__(self, grid_size=(8, 8)):
+        super().__init__()
+        self.grid_size = grid_size
+
+    def forward(self, x, active_superpixels=None):
+        if active_superpixels is None:
+            # If no active_superpixels are provided, assume all are active
+            active_superpixels = np.ones((self.grid_size[0] * self.grid_size[1],))
+        # Replace inactive superpixels with the mean color
+        output = self._apply_superpixels(x, active_superpixels)
+        return output
+
+    def _apply_superpixels(self, x, active_superpixels):
+        # Reshape the image into superpixels
+        h, w, c = x.shape
+        grid_h, grid_w = self.grid_size
+        superpixel_h, superpixel_w = h // grid_h, w // grid_w
+
+        # Create a mask for active superpixels
+        mask = active_superpixels.reshape(grid_h, grid_w, 1, 1, 1)
+        mask = np.kron(mask, np.ones((superpixel_h, superpixel_w, 1)))  # Use 1 channel for mask
+        mask = mask[:, :, :h, :w, :]  # Trim to match the image size
+        mask = mask.reshape(h, w, 1)  # Reshape to (h, w, 1) for broadcasting
+
+        # Replace inactive superpixels with the mean color
+        mean_color = np.mean(x, axis=(0, 1), keepdims=True)
+        output = x * mask + mean_color * (1 - mask)
+        return output
+
+
+
+# Step 5: Combine all layers into a single model
+class SuperPixelModel(nn.Module):
+    def __init__(self, model, target_class, grid_size=(8, 8)):
+        super().__init__()
+        self.super_pixler = SuperPixler(grid_size=grid_size)
+        self.numpy2torch = Numpy2TorchCaster()
+        self.core_model = CoreModel(model)
+        self.od2score = OD2Score(target_class=target_class)
+        self.grid_size = grid_size
+
+    def forward(self, active_superpixels, image=None):
+        if image is None:
+            raise ValueError("Image must be provided for superpixel segmentation.")
+        # Apply superpixel segmentation
+        x = self.super_pixler(image, active_superpixels)
+        # Convert to PyTorch tensor
+        x = self.numpy2torch(x)
+        # Apply the core model
+        detections = self.core_model(x)
+        # Apply NMS and calculate the score
+        boxes, scores = self.od2score(detections)
+        return scores
+
+
+
+# Load the YOLO model (or any object detection model)
+from ultralytics import YOLO
 model = YOLO("yolo_weights/yolov8SC.pt")  # Replace with your custom model path
 
-# Load the dataset
-dataset = load_dataset("marmal88/skin_cancer")
-label_mapping = {
-    "melanoma": "Malignant",
-    "melanocytic_Nevi": "Malignant",
-    "dermatofibroma": "Benign",
-    "basal_cell_carcinoma": "Malignant",
-    "vascular_lesions": "Benign",
-    "actinic_keratoses": "Malignant",
-    "benign_keratosis-like_lesions": "Benign"
-}
+# Define the target class (e.g., "person")
+target_class = "Malignant"
 
-# Apply the mapping to the 'dx' column
-test_split = dataset["test"]
-mapped_labels = [label_mapping[label] for label in test_split["dx"]]
-test_split = test_split.add_column("malignancy", mapped_labels)
+# Step 6: Create the superpixel model
+super_pixel_model = SuperPixelModel(model, target_class, grid_size=(8, 8))
 
-# Define a function to preprocess images for SHAP (consistent with YOLO input)
-def preprocess_image(image):
-    # Resize image to 640x640 as expected by YOLO
-    image = image.resize((640, 640))
-    image = np.array(image).astype(np.float32) / 255.0  # Normalize to [0, 1]
+# Step 7: Prepare the input image
+def preprocess_image(image_path):
+    image = image_path.convert("RGB")
+    image = image.resize((640, 640))  # Resize to the input size expected by YOLO
+    image = np.array(image) / 255.0  # Normalize to [0, 1]
     return image
 
-# Define a function to get YOLO predictions for SHAP
-def predict_fn(images):
-    images_tensor = [torch.tensor(img).permute(2, 0, 1).unsqueeze(0) for img in images]
-    results = [model(img) for img in images_tensor]
+# Load an example image
+# Load an example image
+dataset = load_dataset("marmal88/skin_cancer")
+testset = dataset["test"]
+image_test = testset[10]["image"]
+image = preprocess_image(image_test)
 
-    probs = []
-    for res in results:
-        if len(res[0].boxes) > 0:  # If there are detections
-            # Extract class probabilities (for each object detected)
-            # Assuming we are interested in the first detected object (can be adjusted for multiple detections)
-            probs.append(res[0].probs[0].cpu().detach().numpy())  # Extract the first detection's class probabilities
-        else:
-            # If no detections, return a neutral prediction (50-50 probability for both classes)
-            fake_probs = np.array([0.5, 0.5])  # No detection, assume equal probability
-            probs.append(fake_probs)
 
-    return np.array(probs)
+# Step 8: Define background and input superpixels
+background_super_pixel = np.zeros((1, 8 * 8))  # Reshape to 2D array with 1 row
+image_super_pixel = np.ones((1, 8 * 8))  # Reshape to 2D array with 1 row
 
-# Ensure output directory exists
-output_dir = "shap_explanations"
-os.makedirs(output_dir, exist_ok=True)
+# Step 9: Initialize SHAP KernelExplainer
+explainer = shap.KernelExplainer(
+    lambda active_superpixels: super_pixel_model(active_superpixels, image=image),
+    background_super_pixel
+)
 
-# SHAP Explainer
-# We will use a dummy tensor for the explainer initialization since we only need it to define the input shape
-dummy_input = torch.ones(1, 3, 640, 640)  # Dummy input for model (640x640 image, 3 channels)
+# Step 10: Compute SHAP values
+shap_values = explainer.shap_values(image_super_pixel, nsamples=3000)
 
-# Wrap the model in a function that returns the class probabilities
-def model_wrapper(input_tensor):
-    with torch.no_grad():
-        results = model(input_tensor)
-        if len(results[0].boxes) > 0:
-            return results[0].probs[0].unsqueeze(0)  # Return the class probabilities for the first detection
-        else:
-            return torch.tensor([[0.5, 0.5]])  # Return neutral probabilities if no detection
+# Step 11: Visualize SHAP values
+shap.image_plot(shap_values, -image.numpy(), show=False)
 
-explainer = shap.GradientExplainer(model_wrapper, dummy_input)  # Initialize explainer
+# Save the SHAP plot
+plt.savefig("shap_explanation.png")
+plt.show()
 
-# Process a subset of test images for SHAP explanations
-num_explanations = 5  # Change this to run on more images
-for i, example in enumerate(test_split):
-    image = example["image"]  # PIL Image
-    ground_truth = example["malignancy"]  # True label
+print("SHAP explanation saved to shap_explanation.png")
 
-    # Preprocess image for SHAP
-    image_np = preprocess_image(image)
-
-    # Generate SHAP explanation for the image
-    shap_values = explainer.shap_values(torch.tensor(image_np).unsqueeze(0).permute(0, 3, 1, 2))
-
-    # Extract SHAP values for the first class
-    shap_map = shap_values[0].cpu().detach().numpy()[0]  # Get SHAP values for the first class
-
-    # Generate a heatmap to visualize SHAP values
-    shap_image = np.abs(shap_map).sum(axis=0)  # Summing the absolute values across channels
-    shap_image = np.clip(shap_image, 0, 1)  # Ensure values are between 0 and 1
-
-    # Plot the SHAP values
-    plt.imshow(shap_image, cmap='hot')
-    plt.colorbar()
-    plt.title(f"SHAP Explanation for Image {i + 1} (Ground Truth: {ground_truth})")
-    plt.axis("off")
-
-    # Save SHAP explanation
-    shap_filename = os.path.join(output_dir, f"shap_image_{i + 1}.png")
-    plt.savefig(shap_filename, bbox_inches="tight")
-    plt.show()
-
-    print(f"SHAP explanation generated for image {i + 1} (Ground Truth: {ground_truth}), saved at {shap_filename}")
-
-    # Uncomment the break if you want to process only one image for testing
-    break
-
-print("SHAP explanations completed.")
