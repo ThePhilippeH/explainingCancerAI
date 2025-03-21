@@ -22,13 +22,21 @@ In medical imaging, computer vision models are used to detect diseases, classify
 In this project, we compare three popular deep learning architectures:
 
 1. **CNNs (YOLOv8)**:
-   - Convolutional Neural Networks (CNNs) are the backbone of modern computer vision. YOLOv8, an object detection model, is known for its speed and accuracy. However, its complex architecture can make it difficult to interpret.
+   - Convolutional Neural Networks (CNNs) are the backbone of modern computer vision. YOLOv8, an object detection model, is known for its speed and accuracy. 
+
+   ![alt text](./images_report//image_yolov8_architecture.png)
 
 2. **Vision Transformers (ViT)**:
-   - Vision Transformers (ViT) adapt the transformer architecture, originally designed for natural language processing, to computer vision tasks. ViTs have shown impressive performance but are often considered "black boxes" due to their self-attention mechanisms.
+   - Vision Transformers (ViT) adapt the transformer architecture, originally designed for natural language processing, to computer vision tasks. 
+
+   ![alt text](./images_report/vit_architecture.png)
 
 3. **SWIN Transformers**:
-   - SWIN (Shifted Window) Transformers are a hierarchical variant of ViTs that improve efficiency and scalability. They combine the strengths of CNNs and transformers but raise similar explainability challenges.
+   - SWIN (Shifted Window) Transformers are a hierarchical variant of ViTs that improve efficiency and scalability. 
+   - Unlike ViT which process information in a single fixed size, Swin transformers build hierarchical feature maps, in a similar fashion to CNNs. This allows it to capture different scaled features or information more efficiently.
+   - Another key difference is the use of Shifted Window Attention.  
+
+   ![alt text](./images_report/swin_architecture.png)
 
 ### Explainability Techniques
 To evaluate these models, we use two popular explainability techniques:
