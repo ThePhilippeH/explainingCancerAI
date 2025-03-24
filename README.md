@@ -21,22 +21,109 @@ In medical imaging, computer vision models are used to detect diseases, classify
 ### Models Compared
 In this project, we compare three popular deep learning architectures:
 
-1. **CNNs (YOLOv8)**:
-   - Convolutional Neural Networks (CNNs) are the backbone of modern computer vision. YOLOv8, an object detection model, is known for its speed and accuracy. 
+#### 1. CNNs (YOLOv8)
 
-   ![alt text](./images_report//image_yolov8_architecture.png)
+Convolutional Neural Networks (CNNs) form the backbone of YOLOv8 by extracting spatial and hierarchical features from images. The core components of CNNs used in YOLOv8 include:
 
-2. **Vision Transformers (ViT)**:
-   - Vision Transformers (ViT) adapt the transformer architecture, originally designed for natural language processing, to computer vision tasks. 
+- **Convolutional Layers** – Apply filters to detect edges, textures, and patterns at different levels.
+- **Activation Functions** – Use non-linearity (ReLU) to enhance feature learning.
+- **Pooling Layers** – Reduce dimensionality while retaining important features.
+- **Batch Normalization** – Normalizes activations to stabilize training and improve convergence.
+- **Residual Connections** – Improve gradient flow, making training more efficient.
 
-   ![alt text](./images_report/vit_architecture.png)
 
-3. **SWIN Transformers**:
-   - SWIN (Shifted Window) Transformers are a hierarchical variant of ViTs that improve efficiency and scalability. 
-   - Unlike ViT which process information in a single fixed size, Swin transformers build hierarchical feature maps, in a similar fashion to CNNs. This allows it to capture different scaled features or information more efficiently.
-   - Another key difference is the use of Shifted Window Attention.  
 
-   ![alt text](./images_report/swin_architecture.png)
+YOLOv8 follows a modular design consisting of three main components:  
+
+##### **a. Backbone (Feature Extraction)**  
+The backbone is responsible for extracting useful features from the input image. YOLOv8 uses:  
+- **CSPDarkNet53** – A deep CNN with CSP connections to reduce redundancy and enhance efficiency.  
+- **C2f (CSP2-Factorized)** – Optimizes feature reuse and improves training stability.  
+- **Spatial Pyramid Pooling-Fast (SPPF)** – Captures multi-scale features with minimal computational cost.  
+
+##### **b. Neck (Feature Fusion)**  
+The neck aggregates and refines feature maps from different layers for better object detection. It consists of:  
+- **Path Aggregation Network (PANet)** – Enhances the flow of spatial and semantic information across layers.  
+- **BiFPN (Bi-directional Feature Pyramid Network)** – Efficiently merges low- and high-level features, improving small object detection.  
+
+##### **c. Head (Prediction & Decoding)**  
+The prediction head is responsible for detecting objects in the image. Key improvements in YOLOv8 include:  
+- **Anchor-Free Detection** – Eliminates predefined anchor boxes, making detection faster and more flexible.  
+- **Decoupled Detection Head** – Separates classification and localization tasks, leading to better accuracy.  
+
+![alt text](./images_report//image_yolov8_architecture.png)
+
+
+
+
+#### 1. Vision Transformers (ViTs)  
+
+Vision Transformers (ViTs) are a deep learning architecture designed for image recognition tasks, leveraging the **self-attention mechanism** instead of convolutions to process visual data. Unlike CNNs, which extract features using spatial hierarchies, ViTs **divide an image into fixed-size patches** and process them as a sequence of tokens.  
+
+The core components of ViTs include:  
+
+- **Patch Embedding Layer** – Splits an image into small patches and embeds them into vector representations.  
+- **Position Embeddings** – Adds spatial information to maintain positional relationships between patches.  
+- **Multi-Head Self-Attention (MHSA)** – Captures global dependencies between image regions.  
+- **Feedforward Network (FFN)** – Applies transformations and non-linearities to enhance feature learning.  
+- **Layer Normalization & Residual Connections** – Stabilizes training and improves gradient flow.  
+
+ViTs follow a modular design consisting of three main components:  
+
+##### **a. Patch Embedding & Tokenization**  
+Instead of using convolutions, ViTs split an image into **fixed-size patches** and flatten them into 1D sequences. Key steps include:  
+- **Linear Projection** – Each patch is projected into a high-dimensional embedding space.  
+- **Class Token** – A special learnable token is added to the sequence to represent the entire image.  
+- **Positional Encoding** – Injects spatial information into the model since self-attention lacks inherent locality.  
+
+##### **b. Transformer Encoder (Feature Extraction)**  
+The core of ViTs is the **stacked Transformer encoder**, inspired by NLP models like BERT. Each encoder block contains:  
+- **Multi-Head Self-Attention (MHSA)** – Enables the model to capture long-range dependencies between image patches.  
+- **Feedforward Network (FFN)** – Applies non-linearity and transformations to enhance learned representations.  
+- **Layer Normalization & Residual Connections** – Helps stabilize gradients and improve optimization.  
+
+##### **c. Classification & Output Head**  
+After processing through multiple transformer blocks, the model uses the **class token** for final prediction. This step involves:  
+- **MLP Head** – A simple fully connected layer that maps the class token representation to output categories.  
+- **Softmax Activation** – Converts logits into class probabilities.  
+
+![alt text](./images_report/vit_architecture.png)
+
+#### 1. Swin Transformers  
+
+Swin Transformers (Shifted Window Transformers) are an advanced vision transformer architecture designed to improve computational efficiency and scalability. Unlike standard Vision Transformers (ViTs), which apply **global self-attention** across the entire image, Swin Transformers introduce **hierarchical feature maps** and **shifted window attention**, making them more suitable for dense vision tasks like object detection and segmentation.  
+
+The core components of Swin Transformers include:  
+
+- **Patch Embedding Layer** – Splits an image into smaller non-overlapping patches and embeds them into vectors.  
+- **Hierarchical Feature Maps** – Reduces computational complexity by progressively merging patches into coarser representations.  
+- **Shifted Window Multi-Head Self-Attention (SW-MHSA)** – Applies self-attention within **local** windows while allowing cross-window interactions.  
+- **Feedforward Network (FFN)** – Enhances feature transformations using non-linearity.  
+- **Layer Normalization & Residual Connections** – Stabilizes training and ensures better gradient flow.  
+
+Swin Transformers follow a modular design consisting of three main components:  
+
+##### **a. Patch Embedding & Hierarchical Feature Learning**  
+Instead of processing an entire image as a single sequence, Swin Transformers organize patches into a **hierarchical structure**.  
+- **Linear Projection** – Converts non-overlapping patches into token embeddings.  
+- **Patch Merging** – Gradually merges adjacent patches to reduce sequence length, creating multi-scale feature maps.  
+- **Positional Encoding (Relative Position Bias)** – Introduces spatial awareness without requiring fixed positional embeddings.  
+
+##### **b. Swin Transformer Blocks (Feature Extraction)**  
+The Swin Transformer stack replaces traditional **global self-attention** with **Shifted Window Self-Attention (SW-MHSA)** to enhance efficiency.  
+- **Window-Based Multi-Head Self-Attention (W-MHSA)** – Computes self-attention within non-overlapping local windows to reduce complexity.  
+- **Shifted Window Mechanism** – Introduces a **window-shifting step** in alternating layers, allowing information exchange between neighboring windows.  
+- **Feedforward Network (FFN)** – Applies MLP layers for feature transformation.  
+- **Layer Normalization & Residual Connections** – Stabilizes learning and improves model convergence.  
+
+##### **c. Classification & Output Head**  
+After processing through Swin Transformer blocks, the model generates hierarchical feature representations that are used for classification or other vision tasks.  
+- **Global Average Pooling (GAP)** – Pools feature maps for classification.  
+- **Fully Connected Layer (MLP Head)** – Maps the final representation to output categories.  
+- **Softmax Activation** – Converts logits into probabilities for classification tasks.  
+
+
+![alt text](./images_report/swin_architecture.png)
 
 ### Explainability Techniques
 To evaluate these models, we use two popular explainability techniques:
