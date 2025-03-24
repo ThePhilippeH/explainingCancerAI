@@ -18,6 +18,7 @@ Moreover, AI models have the potential to uncover subtle patterns in medical dat
 ### The Role of Computer Vision in Medical Imaging
 In medical imaging, computer vision models are used to detect diseases, classify conditions, and assist in diagnosis. Skin cancer detection, in particular, has seen significant advancements thanks to deep learning models that can analyze dermatological images with high accuracy.
 
+----
 ### Models Compared
 In this project, we compare three popular deep learning architectures:
 
@@ -125,10 +126,52 @@ After processing through Swin Transformer blocks, the model generates hierarchic
 
 ![alt text](./images_report/swin_architecture.png)
 
-### Explainability Techniques
-To evaluate these models, we use two popular explainability techniques:
-- **LIME (Local Interpretable Model-agnostic Explanations)**: LIME explains individual predictions by approximating the model locally with an interpretable surrogate model.
-- **GRAD-CAM (Gradient-weighted Class Activation Mapping)**: GRAD-CAM generates heatmaps that highlight the regions of an image most influential to the model's decision.
+---
+
+## Explainability Techniques
+#### LIME
+**LIME (Local Interpretable Model-Agnostic Explanations)** is a popular technique designed to **explain the predictions** of any machine learning model by approximating its behavior with an interpretable surrogate model in a local region. The steps of how it works precisely are given in the following list:
+
+1. **Selecting an Instance for Explanation**
+     - LIME explains **one prediction at a time**. Given an input instance \( x \), the goal is to understand why the model predicted a certain output \( f(x) \).
+  
+  2. **Generating Perturbations**
+     - LIME creates **slightly modified versions** of \( x \) by randomly perturbing its feature values. This generates a dataset of perturbed samples \( \{ x_1, x_2, ..., x_n \} \).
+  
+  3. **Getting Predictions from the Black-Box Model**
+     - The original model \( f(x) \) is used to predict outcomes for the perturbed instances, producing predictions \( \{ f(x_1), f(x_2), ..., f(x_n) \} \).
+  
+  4. **Weighting Perturbed Instances**
+     - LIME assigns higher importance to perturbed samples that are **closer** to the original instance \( x \) using a similarity function (e.g., exponential kernel).
+  
+  5. **Training a Simple Surrogate Model**
+     - LIME trains an **interpretable model** (e.g., linear regression, decision tree) on the weighted dataset. This model approximates the local decision boundary of the black-box model.
+  
+  6. **Generating Explanations**
+     - The learned interpretable model is analyzed to understand the contribution of each feature towards the prediction. The output is a **feature importance ranking**, showing which features most influenced the decision.
+
+
+
+#### Grad-CAM
+**Grad-CAM (Gradient-weighted Class Activation Mapping)** is a technique used to generate visual explanations for the predictions made by Convolutional Neural Networks (CNNs). It highlights the regions of the input image that are most important for the model's decision-making process by leveraging gradients. The steps of how it works precisely are given in the following list:
+
+1. **Selecting the Target Class for Explanation**
+   - Grad-CAM explains **which parts of the image contributed most** to a specific class prediction. The target class \( c \) (e.g., a particular object in an image) is selected for visualization.
+  
+2. **Computing Gradients for the Target Class**
+   - Grad-CAM computes the **gradients of the target class score** with respect to the output feature maps of the last convolutional layer in the network. These gradients indicate how important each feature map is for the final decision.
+  
+3. **Global Average Pooling of Gradients**
+   - The gradients are then **pooled globally** (via global average pooling) to obtain a weight for each channel of the feature map. These weights represent the importance of each feature map channel in the decision-making process.
+  
+4. **Weighted Combination of Feature Maps**
+   - The feature maps of the last convolutional layer are **weighted by the computed gradients**, and a weighted sum of these feature maps is created. This provides a class-specific saliency map that highlights the regions important for the target class.
+
+5. **Generating the Class Activation Map**
+   - The weighted feature maps are passed through a **ReLU activation function** to obtain the final **Class Activation Map (CAM)**. This CAM is a heatmap that shows which parts of the image had the greatest influence on the model’s decision.
+
+6. **Visualizing the CAM on the Input Image**
+   - The **Class Activation Map (CAM)** is superimposed onto the original image to visualize the **regions of the image** that contributed most to the target class prediction. High-intensity regions on the heatmap indicate the most influential parts of the image for that class.
 
 ---
 
