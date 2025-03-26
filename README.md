@@ -176,19 +176,42 @@ After processing through Swin Transformer blocks, the model generates hierarchic
 ---
 
 ## Methodology
-In the next section, we’ll dive into the methodology, including the datasets used, how the models were trained, and how LIME and GRAD-CAM were applied to evaluate explainability. 
+In the next section, we’ll dive into the methodology, including the datasets used, WERE WE GOT  THE MODELS, and how LIME and GRAD-CAM were applied to evaluate explainability. 
 
 ---
 
 ## Results and Insights
+
+### LIME Results
+
+| **Image**       | **Original** | **CNN (YOLOv8)** | **ViT**         | **Swin Transformer** |
+|------------------|--------------|------------------|------------------|-----------------------|
+| Example Image 1  | ![Original](./images_report/original1.png) | ![CNN](./images_report/cnn1.png) | ![ViT](./images_report/vit1.png) | ![Swin](./images_report/swin1.png) |
+| Example Image 2  | ![Original](./images_report/original2.png) | ![CNN](./images_report/cnn2.png) | ![ViT](./images_report/vit2.png) | ![Swin](./images_report/swin2.png) |
+| Example Image 3  | ![Original](./images_report/original3.png) | ![CNN](./images_report/cnn3.png) | ![ViT](./images_report/vit3.png) | ![Swin](./images_report/swin3.png) |
+
+
+
+### Grad-Cam Results
+
+
+| **Image**       | **Original** | **CNN (YOLOv8)** | **ViT**         | **Swin Transformer** |
+|------------------|--------------|------------------|------------------|-----------------------|
+| Example Image 1  | ![Original](./images_report/original1.png) | ![CNN](./images_report/cnn1.png) | ![ViT](./images_report/vit1.png) | ![Swin](./images_report/swin1.png) |
+| Example Image 2  | ![Original](./images_report/original2.png) | ![CNN](./images_report/cnn2.png) | ![ViT](./images_report/vit2.png) | ![Swin](./images_report/swin2.png) |
+| Example Image 3  | ![Original](./images_report/original3.png) | ![CNN](./images_report/cnn3.png) | ![ViT](./images_report/vit3.png) | ![Swin](./images_report/swin3.png) |
+
+
+
+
+## Analysis
 (To be added after completing the analysis.)
 
----
+
 
 ## Conclusion
-(To be added after completing the analysis.)
 
----
+
 
 ## References
 - [LIME Paper](https://arxiv.org/abs/1602.04938)
