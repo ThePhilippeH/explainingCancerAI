@@ -4,6 +4,7 @@ import cv2
 import numpy as np
 import torch
 import matplotlib.pyplot as plt
+from PIL import Image
 from transformers import SwinForImageClassification, FeatureExtractionMixin
 from datasets import load_dataset
 
@@ -123,7 +124,7 @@ wrapped_model.eval()
 output_dir = "swin_explanations"
 os.makedirs(output_dir, exist_ok=True)
 # Evaluate first 10 images: display original image and Grad-CAM overlay with model predictions
-list_true_ints=[25, 29, 35, 37, 53, 87, 104, 108, 114, 117]
+list_true_ints=[104,53,208,210,117,87,29]
 for i in list_true_ints:
     sample = dataset[i]
     # Convert image to numpy array (if PIL.Image, convert using np.array)
@@ -154,6 +155,7 @@ for i in list_true_ints:
 
     # Generate final overlay heatmap
     overlay = gen_cam(norm_img, mask)
+    im = Image.fromarray(overlay)
 
     # Display original image and Grad-CAM result side-by-side with ground truth and prediction in title
     fig, axs = plt.subplots(1, 2, figsize=(12, 6))
@@ -165,5 +167,8 @@ for i in list_true_ints:
     axs[1].axis("off")
     plt.suptitle(f"Sample {i + 1} | Ground Truth: {gt_label} | Prediction: {predicted_label} ({correctness})")
     grad_cam_filename = os.path.join(output_dir, "grad_cam_{}.png".format(i + 1))
+    grad_cam_filename_other = os.path.join(output_dir, "grad_cam_{}.png".format(i))
     plt.savefig(grad_cam_filename)
+    im.save(grad_cam_filename_other)
     plt.show()
+
