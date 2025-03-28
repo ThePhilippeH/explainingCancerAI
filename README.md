@@ -182,7 +182,11 @@ In the next section, we’ll dive into the methodology, including the datasets u
 
 ## Results and Insights
 
-### LIME Results
+The results have been subdivided into a series of partitions of interest for in depth comparison and analysis. 
+
+### Clear Cancer 
+
+
 
 | **Image**       | **Original** | **CNN (YOLOv8)** | **ViT**         | **Swin Transformer** |
 |------------------|--------------|------------------|------------------|-----------------------|
@@ -192,7 +196,7 @@ In the next section, we’ll dive into the methodology, including the datasets u
 
 
 
-### Grad-Cam Results
+### Unclear Cancer
 
 
 | **Image**       | **Original** | **CNN (YOLOv8)** | **ViT**         | **Swin Transformer** |
@@ -203,6 +207,9 @@ In the next section, we’ll dive into the methodology, including the datasets u
 
 
 
+
+
+### ONE METHOD TO RULE THEM ALL MUAHAHAHA
 
 ## Analysis
 (To be added after completing the analysis.)
