@@ -184,27 +184,39 @@ In the next section, we’ll dive into the methodology, including the datasets u
 
 The results have been subdivided into a series of partitions of interest for in depth comparison and analysis. 
 
-### Clear Cancer 
+### Clear Cancer Results
 
 
 
-| **Image**       | **Original** | **CNN (YOLOv8)** | **ViT**         | **Swin Transformer** |
-|------------------|--------------|------------------|------------------|-----------------------|
-| Example Image 1  | ![Original](./images_report/original1.png) | ![CNN](./images_report/cnn1.png) | ![ViT](./images_report/vit1.png) | ![Swin](./images_report/swin1.png) |
-| Example Image 2  | ![Original](./images_report/original2.png) | ![CNN](./images_report/cnn2.png) | ![ViT](./images_report/vit2.png) | ![Swin](./images_report/swin2.png) |
-| Example Image 3  | ![Original](./images_report/original3.png) | ![CNN](./images_report/cnn3.png) | ![ViT](./images_report/vit3.png) | ![Swin](./images_report/swin3.png) |
+| **Image**                  | **Original** | **CNN (YOLOv8)**                               | **ViT**         | **Swin Transformer**                          |
+|----------------------------|--------------|------------------------------------------------|------------------|-----------------------------------------------|
+| Example Image 53 Grad-CAM  | ![Original](./images_report/original1.png) | ![CNN](./cnn_explenations/cnn_gradcam_53.png)  | ![ViT](./images_report/vit1.png) | ![Swin](./swin_explanations/grad_cam_53.png)  |
+| Example Image 53 LIME      | ![Original](./images_report/original1.png) | ![CNN](./cnn_explenations/cnn_lime_53.png)     | ![ViT](./images_report/vit1.png) | ![Swin](./swin_explanations/lime_image_54.png)  |
+| Example Image 104 Grad-CAM | ![Original](./images_report/original2.png) | ![CNN](./cnn_explenations/cnn_gradcam_104.png) | ![ViT](./images_report/vit2.png) | ![Swin](./swin_explanations/grad_cam_104.png) |
+| Example Image 104 LIME     | ![Original](./images_report/original2.png) | ![CNN](./cnn_explenations/cnn_lime_104.png)    | ![ViT](./images_report/vit2.png) | ![Swin](./swin_explanations/lime_image_105.png) |
+
+### Unclear Cancer Results
 
 
+| **Image**                  | **Original** | **CNN (YOLOv8)**                            | **ViT**         | **Swin Transformer**                          |
+|----------------------------|--------------|---------------------------------------------|------------------|-----------------------------------------------|
+| Example Image 208 Grad-CAM | ![Original](./images_report/original1.png) | ![CNN](./cnn_explenations/cnn_gradcam_208.png) | ![ViT](./images_report/vit1.png) | ![Swin](./swin_explanations/grad_cam_208.png) |
+| Example Image 208 LIME     | ![Original](./images_report/original1.png) | ![CNN](./cnn_explenations/cnn_lime_208.png) | ![ViT](./images_report/vit1.png) | ![Swin](./swin_explanations/lime_image_209.png) |
+| Example Image 210 Grad-CAM | ![Original](./images_report/original2.png) | ![CNN](./cnn_explenations/cnn_gradcam_210.png) | ![ViT](./images_report/vit2.png) | ![Swin](./swin_explanations/grad_cam_210.png) |
+| Example Image 210 LIME     | ![Original](./images_report/original2.png) | ![CNN](./cnn_explenations/cnn_lime_210.png) | ![ViT](./images_report/vit2.png) | ![Swin](./swin_explanations/lime_image_211.png) |
 
-### Unclear Cancer
+
+### One method performs better than the other
 
 
-| **Image**       | **Original** | **CNN (YOLOv8)** | **ViT**         | **Swin Transformer** |
-|------------------|--------------|------------------|------------------|-----------------------|
-| Example Image 1  | ![Original](./images_report/original1.png) | ![CNN](./images_report/cnn1.png) | ![ViT](./images_report/vit1.png) | ![Swin](./images_report/swin1.png) |
-| Example Image 2  | ![Original](./images_report/original2.png) | ![CNN](./images_report/cnn2.png) | ![ViT](./images_report/vit2.png) | ![Swin](./images_report/swin2.png) |
-| Example Image 3  | ![Original](./images_report/original3.png) | ![CNN](./images_report/cnn3.png) | ![ViT](./images_report/vit3.png) | ![Swin](./images_report/swin3.png) |
-
+| **Image**                  | **Original** | **CNN (YOLOv8)**                               | **ViT**         | **Swin Transformer**                            |
+|----------------------------|--------------|------------------------------------------------|------------------|-------------------------------------------------|
+| Example Image 29 Grad-CAM  | ![Original](./images_report/original1.png) | ![CNN](./cnn_explenations/cnn_gradcam_29.png)  | ![ViT](./images_report/vit1.png) | ![Swin](./swin_explanations/grad_cam_29.png)    |
+| Example Image 29 LIME      | ![Original](./images_report/original1.png) | ![CNN](./cnn_explenations/cnn_lime_29.png)     | ![ViT](./images_report/vit1.png) | ![Swin](./swin_explanations/lime_image_30.png)  |
+| Example Image 87 Grad-CAM  | ![Original](./images_report/original2.png) | ![CNN](./cnn_explenations/cnn_gradcam_87.png)  | ![ViT](./images_report/vit2.png) | ![Swin](./swin_explanations/grad_cam_87.png)    |
+| Example Image 87 LIME      | ![Original](./images_report/original2.png) | ![CNN](./cnn_explenations/cnn_lime_87.png)     | ![ViT](./images_report/vit2.png) | ![Swin](./swin_explanations/lime_image_87.png)  |
+| Example Image 117 Grad-CAM | ![Original](./images_report/original3.png) | ![CNN](./cnn_explenations/cnn_gradcam_117.png) | ![ViT](./images_report/vit3.png) | ![Swin](./swin_explanations/grad_cam_117.png)   |
+| Example Image 117 LIME     | ![Original](./images_report/original3.png) | ![CNN](./cnn_explenations/cnn_lime_117.png)    | ![ViT](./images_report/vit3.png) | ![Swin](./swin_explanations/lime_image_117.png) |
 
 
 
