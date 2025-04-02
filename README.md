@@ -222,12 +222,12 @@ The results have been subdivided into a series of partitions of interest for in 
 The first results we choose to present partain a classic example of skin cancer where the lesion is clearly visible even to the untrained eye.
 
 
-| **Image**                  | **Original** | **CNN (YOLOv8)**                               | **ViT**         | **Swin Transformer**                                     |
+| **Image** | **Original** | **CNN (YOLOv8)** | **ViT** | **Swin Transformer** |
 |----------------------------|--------------|------------------------------------------------|------------------|----------------------------------------------------------|
-| Example Image 53 Grad-CAM  | ![Original](./images_report/original53.png) | ![CNN](./cnn_explenations/cnn_gradcam_53.png)  | ![ViT](./images_report/vit_gradcam53.png) | ![Swin](./swin_explanations/grad_cam_53.png)             |
-| Example Image 53 LIME      | ![Original](./images_report/original53.png) | ![CNN](./cnn_explenations/cnn_lime_53.png)     | ![ViT](./images_report/vit_lime53.png) | ![Swin](./swin_explanations/lime_image_53_reshaped.png)  |
-| Example Image 104 Grad-CAM | ![Original](./images_report/original104.png) | ![CNN](./cnn_explenations/cnn_gradcam_104.png) | ![ViT](./images_report/vit_gradcam104.png) | ![Swin](./swin_explanations/grad_cam_104.png)            |
-| Example Image 104 LIME     | ![Original](./images_report/original104.png) | ![CNN](./cnn_explenations/cnn_lime_104.png)    | ![ViT](./images_report/vit_lime104.png) | ![Swin](./swin_explanations/lime_image_104_reshaped.png) |
+| Example Image 53 Grad-CAM  | <img src="./images_report/original53.png" width="200"> | <img src="./cnn_explenations/cnn_gradcam_53.png" width="200">  | <img src="./images_report/vit_gradcam53.png" width="200"> | <img src="./swin_explanations/grad_cam_53.png" width="200">             |
+| Example Image 53 LIME      | <img src="./images_report/original53.png" width="200"> | <img src="./cnn_explenations/cnn_lime_53.png" width="200">     | <img src="./images_report/vit_lime53.png" width="200"> | <img src="./swin_explanations/lime_image_53_reshaped.png" width="200">  |
+| Example Image 104 Grad-CAM | <img src="./images_report/original104.png" width="200"> | <img src="./cnn_explenations/cnn_gradcam_104.png" width="200"> | <img src="./images_report/vit_gradcam104.png" width="200"> | <img src="./swin_explanations/grad_cam_104.png" width="200">            |
+| Example Image 104 LIME     | <img src="./images_report/original104.png" width="200"> | <img src="./cnn_explenations/cnn_lime_104.png" width="200">    | <img src="./images_report/vit_lime104.png" width="200"> | <img src="./swin_explanations/lime_image_104_reshaped.png" width="200"> |
 
 As can be seen in the table above, the models and explainers behave very different in the different scenarios.
 We chose these two images to highlight the important differences between the models and explainers. 
@@ -242,13 +242,12 @@ Furthermore, we can clearly see that the ViT model takes up a larger area as an 
 ### Unclear Cancer Results
 Unclear cancer results refer to images where the cancer lesion is not obviously cancerogenous. These would pose a high degree of difficulty for human doctors and therefore their correct identification by computer vision models could be of great help. Without any detailed technical knowledge we assume the darker area to be the lesion of interest.
 
-| **Image**                  | **Original** | **CNN (YOLOv8)**                            | **ViT**         | **Swin Transformer**                                     |
+| **Image** | **Original** | **CNN (YOLOv8)** | **ViT** | **Swin Transformer** |
 |----------------------------|--------------|---------------------------------------------|------------------|----------------------------------------------------------|
-| Clean Image 208 Grad-CAM | ![Original](./images_report/original208.png) | ![CNN](./cnn_explenations/cnn_gradcam_208.png) | ![ViT](./images_report/vit_gradcam208.png) | ![Swin](./swin_explanations/grad_cam_208.png)            |
-| Clean Image 208 LIME     | ![Original](./images_report/original208.png) | ![CNN](./cnn_explenations/cnn_lime_208.png) | ![ViT](./images_report/vit_lime208.png) | ![Swin](./swin_explanations/lime_image_208_reshaped.png) |
-| Noisy Image 210 Grad-CAM | ![Original](./images_report/original210.png) | ![CNN](./cnn_explenations/cnn_gradcam_210.png) | ![ViT](./images_report/vit_gradcam210.png) | ![Swin](./swin_explanations/grad_cam_210.png)            |
-| Noisy Image 210 LIME     | ![Original](./images_report/original210.png) | ![CNN](./cnn_explenations/cnn_lime_210.png) | ![ViT](./images_report/vit_lime210.png) | ![Swin](./swin_explanations/lime_image_210_reshaped.png) |
-
+| Clean Image 208 Grad-CAM | <img src="./images_report/original208.png" width="200"> | <img src="./cnn_explenations/cnn_gradcam_208.png" width="200"> | <img src="./images_report/vit_gradcam208.png" width="200"> | <img src="./swin_explanations/grad_cam_208.png" width="200">            |
+| Clean Image 208 LIME     | <img src="./images_report/original208.png" width="200"> | <img src="./cnn_explenations/cnn_lime_208.png" width="200"> | <img src="./images_report/vit_lime208.png" width="200"> | <img src="./swin_explanations/lime_image_208_reshaped.png" width="200"> |
+| Noisy Image 210 Grad-CAM | <img src="./images_report/original210.png" width="200"> | <img src="./cnn_explenations/cnn_gradcam_210.png" width="200"> | <img src="./images_report/vit_gradcam210.png" width="200"> | <img src="./swin_explanations/grad_cam_210.png" width="200">            |
+| Noisy Image 210 LIME     | <img src="./images_report/original210.png" width="200"> | <img src="./cnn_explenations/cnn_lime_210.png" width="200"> | <img src="./images_report/vit_lime210.png" width="200"> | <img src="./swin_explanations/lime_image_210_reshaped.png" width="200"> |
 
 Similar to the previous section, two images are chosen that represent two different cases, noisy (hairy) with index 210 and clean with index 208.
 
@@ -263,17 +262,14 @@ Finally in terms of LIME explenations for the noisy image (210) we see that the 
 
 ### One method performs better than the other
 
-
-| **Image**                  | **Original** | **CNN (YOLOv8)**                               | **ViT**         | **Swin Transformer**                                     |
+| **Image** | **Original** | **CNN (YOLOv8)** | **ViT** | **Swin Transformer** |
 |----------------------------|--------------|------------------------------------------------|------------------|----------------------------------------------------------|
-| Example Image 29 Grad-CAM  | ![Original](./images_report/original29.png) | ![CNN](./cnn_explenations/cnn_gradcam_29.png)  | ![ViT](./images_report/vit_gradcam29.png) | ![Swin](./swin_explanations/grad_cam_29.png)             |
-| Example Image 29 LIME      | ![Original](./images_report/original29.png) | ![CNN](./cnn_explenations/cnn_lime_29.png)     | ![ViT](./images_report/vit_lime29.png) | ![Swin](./swin_explanations/lime_image_29_reshaped.png)  |
-| Example Image 87 Grad-CAM  | ![Original](./images_report/original87.png) | ![CNN](./cnn_explenations/cnn_gradcam_87.png)  | ![ViT](./images_report/vit_gradcam87.png) | ![Swin](./swin_explanations/grad_cam_87.png)             |
-| Example Image 87 LIME      | ![Original](./images_report/original87.png) | ![CNN](./cnn_explenations/cnn_lime_87.png)     | ![ViT](./images_report/vit_lime87.png) | ![Swin](./swin_explanations/lime_image_87_reshaped.png)  |
-| Example Image 117 Grad-CAM | ![Original](./images_report/original117.png) | ![CNN](./cnn_explenations/cnn_gradcam_117.png) | ![ViT](./images_report/vit_gradcam117.png) | ![Swin](./swin_explanations/grad_cam_117.png)            |
-| Example Image 117 LIME     | ![Original](./images_report/original117.png) | ![CNN](./cnn_explenations/cnn_lime_117.png)    | ![ViT](./images_report/vit_lime117.png) | ![Swin](./swin_explanations/lime_image_117_reshaped.png) |
-
-
+| Example Image 29 Grad-CAM  | <img src="./images_report/original29.png" width="200"> | <img src="./cnn_explenations/cnn_gradcam_29.png" width="200">  | <img src="./images_report/vit_gradcam29.png" width="200"> | <img src="./swin_explanations/grad_cam_29.png" width="200">             |
+| Example Image 29 LIME      | <img src="./images_report/original29.png" width="200"> | <img src="./cnn_explenations/cnn_lime_29.png" width="200">     | <img src="./images_report/vit_lime29.png" width="200"> | <img src="./swin_explanations/lime_image_29_reshaped.png" width="200">  |
+| Example Image 87 Grad-CAM  | <img src="./images_report/original87.png" width="200"> | <img src="./cnn_explenations/cnn_gradcam_87.png" width="200">  | <img src="./images_report/vit_gradcam87.png" width="200"> | <img src="./swin_explanations/grad_cam_87.png" width="200">             |
+| Example Image 87 LIME      | <img src="./images_report/original87.png" width="200"> | <img src="./cnn_explenations/cnn_lime_87.png" width="200">     | <img src="./images_report/vit_lime87.png" width="200"> | <img src="./swin_explanations/lime_image_87_reshaped.png" width="200">  |
+| Example Image 117 Grad-CAM | <img src="./images_report/original117.png" width="200"> | <img src="./cnn_explenations/cnn_gradcam_117.png" width="200"> | <img src="./images_report/vit_gradcam117.png" width="200"> | <img src="./swin_explanations/grad_cam_117.png" width="200">            |
+| Example Image 117 LIME     | <img src="./images_report/original117.png" width="200"> | <img src="./cnn_explenations/cnn_lime_117.png" width="200">    | <img src="./images_report/vit_lime117.png" width="200"> | <img src="./swin_explanations/lime_image_117_reshaped.png" width="200"> |
 
 
 ### ONE METHOD TO RULE THEM ALL MUAHAHAHA
