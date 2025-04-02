@@ -189,12 +189,20 @@ The Swin Transformer was imported from **Hugging Face**.
 - **Grad-CAM implementation**: We applied the Grad-CAM technique to the Swin Transformer model using the **PyTorch** library. By extracting the gradients from the final convolutional layer of the Swin Transformer model, we were able to generate class activation maps that highlight the regions of the input image that were most important for the model's predictions.
 ---
 
+### Dataset
+
+The **HAM10000 dataset**, was compiled to facilitate the development and evaluation of machine learning models for automated skin cancer diagnosis. Comprising 10,015 dermatoscopic images, it encompasses seven distinct diagnostic categories: 
+melanocytic nevi, melanoma, benign keratosis-like lesions, basal cell carcinoma, actinic keratoses, vascular lesions, and dermatofibroma.
+The dataset's diversity is a key strength, stemming from its collection over 20 years from two geographically separate sources—the Medical University of Vienna and a Queensland skin cancer practice—thereby reflecting real-world clinical variability and enhancing the robustness of trained algorithms. Consequently, HAM10000 has become a benchmark for assessing the performance of both machine learning systems and human experts in skin lesion classification, significantly advancing research in automated skin cancer detection.
+
+This dataset was downloaded from [Google](https://www.google.com)
+
 ## Results and Insights
 
 The results have been subdivided into a series of partitions of interest for in depth comparison and analysis. We chose for a set of clearly visible lesion, one with a lesion that is barely visible, as well as results where one method performs better than the other. This is to show whether some methods are better at explaining certain types of images than others.
 
 ### Clear Cancer Results
-
+The first results we choose to present partain a classic example of skin cancer where the lesion is clearly visible even to the untrained eye.
 
 
 | **Image**                  | **Original** | **CNN (YOLOv8)**                               | **ViT**         | **Swin Transformer**                                     |
@@ -215,14 +223,25 @@ The second image shows a similar pattern for the Grad-CAM example, but diverges 
 Furthermore, we can clearly see that the ViT model takes up a larger area as an explanation than the other two models. This can be explained by how the ViT model processes the image, by dividing it into patches, and then processing these patches. This phenomena is especially very clear in the Grad-CAM images, where the Swin and YOLOv8 models have much more detailed areas, that reflect the lesions.
 
 ### Unclear Cancer Results
-
+Unclear cancer results refer to images where the cancer lesion is not obviously cancerogenous. These would pose a high degree of difficulty for human doctors and therefore their correct identification by computer vision models could be of great help. Without any detailed technical knowledge we assume the darker area to be the lesion of interest.
 
 | **Image**                  | **Original** | **CNN (YOLOv8)**                            | **ViT**         | **Swin Transformer**                                     |
 |----------------------------|--------------|---------------------------------------------|------------------|----------------------------------------------------------|
-| Example Image 208 Grad-CAM | ![Original](./images_report/original208.png) | ![CNN](./cnn_explenations/cnn_gradcam_208.png) | ![ViT](./images_report/vit_gradcam208.png) | ![Swin](./swin_explanations/grad_cam_208.png)            |
-| Example Image 208 LIME     | ![Original](./images_report/original208.png) | ![CNN](./cnn_explenations/cnn_lime_208.png) | ![ViT](./images_report/vit_gradcam208.png) | ![Swin](./swin_explanations/lime_image_208_reshaped.png) |
-| Example Image 210 Grad-CAM | ![Original](./images_report/original210.png) | ![CNN](./cnn_explenations/cnn_gradcam_210.png) | ![ViT](./images_report/vit_gradcam210.png) | ![Swin](./swin_explanations/grad_cam_210.png)            |
-| Example Image 210 LIME     | ![Original](./images_report/original210.png) | ![CNN](./cnn_explenations/cnn_lime_210.png) | ![ViT](./images_report/vit_lime210.png) | ![Swin](./swin_explanations/lime_image_210_reshaped.png) |
+| Clean Image 208 Grad-CAM | ![Original](./images_report/original208.png) | ![CNN](./cnn_explenations/cnn_gradcam_208.png) | ![ViT](./images_report/vit_gradcam208.png) | ![Swin](./swin_explanations/grad_cam_208.png)            |
+| Clean Image 208 LIME     | ![Original](./images_report/original208.png) | ![CNN](./cnn_explenations/cnn_lime_208.png) | ![ViT](./images_report/vit_lime208.png) | ![Swin](./swin_explanations/lime_image_208_reshaped.png) |
+| Noisy Image 210 Grad-CAM | ![Original](./images_report/original210.png) | ![CNN](./cnn_explenations/cnn_gradcam_210.png) | ![ViT](./images_report/vit_gradcam210.png) | ![Swin](./swin_explanations/grad_cam_210.png)            |
+| Noisy Image 210 LIME     | ![Original](./images_report/original210.png) | ![CNN](./cnn_explenations/cnn_lime_210.png) | ![ViT](./images_report/vit_lime210.png) | ![Swin](./swin_explanations/lime_image_210_reshaped.png) |
+
+
+Similar to the previous section, two images are chosen that represent two different cases, noisy (hairy) with index 210 and clean with index 208.
+
+When analysing the clean image (208) we can see clear differences between the performance of the explainability methods. Grad-Cam seems to very clearly show the attention hotspots for both YOLOv8 and for ViT. Both pinpoint the left part of the lesion as being an indicator of cancer. Interestingly, ViT seems to also focus very heavily on the right most part of the lesion, where YOLOv8 seems to indicate the countour of the lesion. SWIN seems to struggle to find the correct area of the lesion specifically and also divides its attention towards many other small changes in hue within the image (normal skin variations) This lack of focus for SWIN is to be expected to some extend given the fine grained nature of its attention.
+
+In terms of LIME explenations for the clean image (208), we see that perturbing the model seems that perturbation create many different possible areas of focus for all models. Of interest are how both SWIN and YOLOv8 seem to capture part of the lesion in one of these areas (the previously discussed right lesion also heavily emphasized by ViT with Grad-Cam). Perturbing the image for ViT seems to make it loose any track of where the lesion is exactly, this may be expected due to the general nature of its attention mechanism. 
+
+When analysing the noisy image (210), particularly with Grad-Cam, we see a very similar explenation area from all three models albeit in completely different modalities. YOLOv8 seems to explain the area of interest in a classical way, where the highes attention is drawn to the area of lesion, correctly ignoring all the noise (hair). ViT also highlights the are of interst but in an inverted manner, the attention is drawn to everything else except for the lesion, thus giving a negative demarcation of the area of the lesion. Finally SWIN seems to have some hotspots around some hairs yet finds an area of interest (left most area) that corresponds to the lesion being analysed.
+
+Finally in terms of LIME explenations for the noisy image (210) we see that the perturbation of the image in addition to the inherent noise of hair, completely confuses the models accross the board. Some small overalps with the lesions can be seen, yet no one area demarcates any relevant or substantial portion of the lesion in question.
 
 
 ### One method performs better than the other
