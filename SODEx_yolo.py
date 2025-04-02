@@ -2,7 +2,8 @@ import torch
 import numpy as np
 import json
 from lime import lime_image
-from skimage.segmentation import quickshift, mark_boundaries
+from numba.cpython.slicing import slice_constructor_impl
+from skimage.segmentation import quickshift, mark_boundaries, slic
 from ultralytics import YOLO
 from datasets import load_dataset
 from PIL import Image
@@ -48,6 +49,8 @@ def surrogate_classifier(images_np, model):
             outputs.append(np.zeros(len(model.names)))  # Return zero scores if error
     return np.array(outputs)
 
+
+
 label_mapping = {
     "melanoma": "Malignant",
     "melanocytic_Nevi": "Malignant",
@@ -64,9 +67,10 @@ test_split = dataset["test"]
 # Load the YOLO model
 model = YOLO("yolo_weights/yolov8SC.pt")  # Replace with your model path
 
+true_positives = [104, 53,208, 210,117,87,29]
 # Process and explain 10 images
-for index in range(10):
-    print(f"Processing image {index + 1}/10")
+for index in true_positives:
+    print(f"Processing image {index + 1}")
     image = test_split[index]["image"]
     ground_truth = test_split[index]["dx"]
     truth = label_mapping[ground_truth]
@@ -83,21 +87,33 @@ for index in range(10):
         hide_color=0,
         num_samples=1000,
         segmentation_fn=lambda x: quickshift(x, kernel_size=4, max_dist=200)
+        # segmentation_fn=lambda x: slic(x, n_segments=50, compactness=10)
     )
+
 
     # Get explanation mask
     image_explained, mask = explanation.get_image_and_mask(
         explanation.top_labels[0], positive_only=True, num_features=10, hide_rest=False
     )
+    image_explained2, mask2 = explanation.get_image_and_mask(
+        explanation.top_labels[0], positive_only=False, num_features=10, hide_rest=False
+    )
+
+    # Resize the image and mask to 244x244
+    image_explained2 = Image.fromarray(image_explained2).resize((224, 224))
+    mask2 = Image.fromarray(mask2.astype(np.uint8)).resize((224, 224), Image.NEAREST)
+    mask2 = np.array(mask2).astype(bool)
 
     # Overlay the explanation mask onto the original image
-    overlay = mark_boundaries(image_np, mask)
+    overlay = mark_boundaries(np.array(image_explained2), mask2)
 
     # Plot only the overlay explanation
     plt.figure(figsize=(5, 5))
     plt.imshow(overlay)
     plt.title(f"Overlay Explanation - Image {index + 1}, label: {truth}")
     plt.axis("off")
+    plt.savefig(f"results_lime/overlay_{index}.png")
     plt.show()
 
-print("Processing complete.")
+    print("Size of image: ", overlay.shape)
+print("Done")
