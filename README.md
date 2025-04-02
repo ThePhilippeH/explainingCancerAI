@@ -176,18 +176,24 @@ After processing through Swin Transformer blocks, the model generates hierarchic
 ---
 
 ## Methodology
-In the next section, we’ll dive into the methodology, including the datasets used, WERE WE GOT  THE MODELS, and how LIME and GRAD-CAM were applied to evaluate explainability. 
+In the next section, we’ll dive into the methodology, including the datasets used, the models utilized, and how LIME and GRAD-CAM were applied to evaluate explainability. 
+
+### YOLOv8 (CNN)
+The YOLOv8 model utilized was initially trained on the COCO (Common Objects in Context) dataset and fine-tuned on the **HAM10000 dataset** by the user tamaraabuhawileh on [github][yolov8git]. The repository outlines the data preprocessing steps taken, including converting segmentation masks to bounding boxes, simplifying multi-class labels into binary labels (malignant/benign), balancing the dataset through down-sampling, and splitting the data into training, validation, and test sets. For a better understanding of the fine-tuning process please refer to the provided [link][yolov8git].
+
+[yolov8git]:https://github.com/tamaraabuhawileh/Skin-Cancer-Object-Detection-YOLO
 
 ### Swin Transformer
 
 The Swin Transformer model used was a model initially trained on the imagenet dataset and later fine-tuned on the **HAM10000 dataset**, which contains **10,015 dermoscopic images** of skin lesions. 
 The dataset includes seven diagnostic categories: melanoma, melanocytic nevus, basal cell carcinoma, actinic keratosis, benign keratosis, dermatofibroma, and vascular lesion. 
 We transformed these 7 categories into two main categories: Malignant and Benign. 
-The Swin Transformer was imported from **Hugging Face**.
+The Swin Transformer was imported from **Hugging Face**. [LINKTOWHERETHEMODELISFROM][swinlink]
 
 - **LIME implementation**: We implemented LIME using the **LIME-Py** library, which provides a simple and intuitive interface for generating explanations. The LIME-Py library allows us to create LIME explainer objects and generate explanations for individual predictions made by the Swin Transformer model.
 - **Grad-CAM implementation**: We applied the Grad-CAM technique to the Swin Transformer model using the **PyTorch** library. By extracting the gradients from the final convolutional layer of the Swin Transformer model, we were able to generate class activation maps that highlight the regions of the input image that were most important for the model's predictions.
----
+
+[swinlink]:  huggingface.com
 
 ### Dataset
 
@@ -196,7 +202,9 @@ The **HAM10000 dataset**, was compiled to facilitate the development and evaluat
 Comprising 10,015 dermatoscopic images, it encompasses seven distinct diagnostic categories: 
 melanocytic nevi, melanoma, benign keratosis-like lesions, basal cell carcinoma, actinic keratoses, vascular lesions, and dermatofibroma. The dataset offers a variety of fatures:  Each image, identified by image_id and representing a lesion with a unique lesion_id, is accompanied by its imagewidth in pixels. Diagnostic information is provided through dx (specific diagnosis) and dx_type (diagnosis method). Patient demographics include age (numerical), sex (categorical), and localization (lesion location), enhancing the dataset's utility for comprehensive machine learning model development. For this project, only the image and the diagnostic information were utilized. 
 
-This dataset was downloaded from [Huggingface](https://huggingface.co/datasets/marmal88/skin_cancer) where it was uploaded by Daniel Low. 
+This dataset was downloaded from [Huggingface][ham10kdataset] where it was uploaded by Daniel Low. 
+
+[ham10kdataset]: https://huggingface.co/datasets/marmal88/skin_cancer
 
 ## Results and Insights
 
