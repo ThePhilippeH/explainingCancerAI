@@ -262,6 +262,8 @@ Finally in terms of LIME explenations for the noisy image (210) we see that the 
 
 ### One method performs better than the other
 
+Finally, we present several cases where different models show varying levels of performance in explainability, which may help reveal the interpretability of each model architecture.
+
 | **Image** | **Original** | **CNN (YOLOv8)** | **ViT** | **Swin Transformer** |
 |----------------------------|--------------|------------------------------------------------|------------------|----------------------------------------------------------|
 | Example Image 29 Grad-CAM  | <img src="./images_report/original29.png" width="200"> | <img src="./cnn_explenations/cnn_gradcam_29.png" width="200">  | <img src="./images_report/vit_gradcam29.png" width="200"> | <img src="./swin_explanations/grad_cam_29.png" width="200">             |
@@ -271,6 +273,11 @@ Finally in terms of LIME explenations for the noisy image (210) we see that the 
 | Example Image 117 Grad-CAM | <img src="./images_report/original117.png" width="200"> | <img src="./cnn_explenations/cnn_gradcam_117.png" width="200"> | <img src="./images_report/vit_gradcam117.png" width="200"> | <img src="./swin_explanations/grad_cam_117.png" width="200">            |
 | Example Image 117 LIME     | <img src="./images_report/original117.png" width="200"> | <img src="./cnn_explenations/cnn_lime_117.png" width="200">    | <img src="./images_report/vit_lime117.png" width="200"> | <img src="./swin_explanations/lime_image_117_reshaped.png" width="200"> |
 
+In image 29, the results from different explainability methods show some differences, but an overall pattern can still be observed. In the Grad-CAM results, CNN accurately focuses on the lesion area and the darkest region of the skin; ViT’s attention covers almost the entire lesion; while Swin performs relatively weaker, partially focusing on hair in the image and some fine details within the lesion, which is clearly related to the design of Swin itself. In the LIME results, both Swin and YOLOv8 successfully capture important detailed regions, while ViT does not. This case may suggest that YOLOv8 and Swin have certain advantages in detecting key fine-grained features, while ViT tends to focus on the overall structure, making it less reliable in similar cases.
+
+In image 87, the results from different methods are relatively consistent. YOLOv8 shows attention over a large area, likely reflecting interference from noise. ViT focuses quite accurately on the main lesion area, showing its strength in coarse-grained attention. Swin also highlights the main lesion area but pays more attention to small details, which also makes it more sensitive to noise. This typical case may reflect the models’ differences in attention granularity and their ability to handle noisy environments. These trade-offs may be important to consider in real-world applications.
+
+In image 117, different methods show more varied behavior. YOLOv8 focuses well on key regions in the Grad-CAM result, while its LIME output is less clear. ViT focuses on the wrong edges in Grad-CAM but manages to locate the correct lesion area in LIME. Swin, similarly, focuses on the wrong edges in Grad-CAM, and although its LIME output partly identifies the lesion, it still shows attention to irrelevant edge areas. This case highlights the different characteristics of Grad-CAM and LIME in reflecting attention areas, and it also shows how Swin intuitively balances between the behaviors of CNN and Transformer models.
 
 ### ONE METHOD TO RULE THEM ALL MUAHAHAHA
 
