@@ -191,11 +191,12 @@ The Swin Transformer was imported from **Hugging Face**.
 
 ### Dataset
 
-The **HAM10000 dataset**, was compiled to facilitate the development and evaluation of machine learning models for automated skin cancer diagnosis. Comprising 10,015 dermatoscopic images, it encompasses seven distinct diagnostic categories: 
-melanocytic nevi, melanoma, benign keratosis-like lesions, basal cell carcinoma, actinic keratoses, vascular lesions, and dermatofibroma.
-The dataset's diversity is a key strength, stemming from its collection over 20 years from two geographically separate sources—the Medical University of Vienna and a Queensland skin cancer practice—thereby reflecting real-world clinical variability and enhancing the robustness of trained algorithms. Consequently, HAM10000 has become a benchmark for assessing the performance of both machine learning systems and human experts in skin lesion classification, significantly advancing research in automated skin cancer detection.
+The **HAM10000 dataset**, was compiled to facilitate the development and evaluation of machine learning models for automated skin cancer diagnosis. The dataset's diversity is a key strength, stemming from its collection over 20 years from two geographically separate sources—the Medical University of Vienna and a Queensland skin cancer practice—thereby reflecting real-world clinical variability and enhancing the robustness of trained algorithms. Consequently, HAM10000 has become a benchmark for assessing the performance of both machine learning systems and human experts in skin lesion classification, significantly advancing research in automated skin cancer detection. Due to this we consider this to be an appropriate dataset to test skin cancer explainability for the skin cancer detection task.
 
-This dataset was downloaded from [Google](https://www.google.com)
+Comprising 10,015 dermatoscopic images, it encompasses seven distinct diagnostic categories: 
+melanocytic nevi, melanoma, benign keratosis-like lesions, basal cell carcinoma, actinic keratoses, vascular lesions, and dermatofibroma. The dataset offers a variety of fatures:  Each image, identified by image_id and representing a lesion with a unique lesion_id, is accompanied by its imagewidth in pixels. Diagnostic information is provided through dx (specific diagnosis) and dx_type (diagnosis method). Patient demographics include age (numerical), sex (categorical), and localization (lesion location), enhancing the dataset's utility for comprehensive machine learning model development. For this project, only the image and the diagnostic information were utilized. 
+
+This dataset was downloaded from [Huggingface](https://huggingface.co/datasets/marmal88/skin_cancer) where it was uploaded by Daniel Low. 
 
 ## Results and Insights
 
