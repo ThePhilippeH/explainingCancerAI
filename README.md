@@ -181,7 +181,15 @@ In the next section, we’ll dive into the methodology, including the datasets u
 ### YOLOv8 (CNN)
 The YOLOv8 model utilized was initially trained on the COCO (Common Objects in Context) dataset and fine-tuned on the **HAM10000 dataset** by the user tamaraabuhawileh on [github][yolov8git]. The repository outlines the data preprocessing steps taken, including converting segmentation masks to bounding boxes, simplifying multi-class labels into binary labels (malignant/benign), balancing the dataset through down-sampling, and splitting the data into training, validation, and test sets. For a better understanding of the fine-tuning process please refer to the provided [link][yolov8git].
 
+- **LIME Implementation**: We implemented SODEx (Saliency for Object Detection Explanation) as a technique that uses LIME (Local Interpretable Model-agnostic Explanations) to explain the predictions of YOLOv8. It fundamentally adapts LIME to handle the unique output format of object detection, which includes class probabilities and bounding box coordinates. Refer to the repository for a detailed [implementation][limeyolov8].
+
+- **Grad-Cam Implementation**: We implement Grad-Cam explenations by using the [this][libgradcamyolov8] grad-cam library. Refer to the respository for a detailed  [implementation][gradcamv8]
+
 [yolov8git]:https://github.com/tamaraabuhawileh/Skin-Cancer-Object-Detection-YOLO
+[limeyolov8]:https://github.com/ThePhilippeH/explainingCancerAI/blob/cnn/SODEx_yolo.py
+[libgradcamyolov8]:https://spritan.github.io/YOLOv8_Explainer/
+[gradcamv8]:https://github.com/ThePhilippeH/explainingCancerAI/blob/cnn/grad_cam_yolo.py
+
 
 ### Swin Transformer
 
