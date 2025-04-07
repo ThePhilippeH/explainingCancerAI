@@ -10,8 +10,7 @@ In this blog post, we explore the explainability of three prominent deep learnin
 ## Background
 
 ### What is AI Explainability?
-AI explainability refers to the ability of an AI model to provide clear, understandable reasons for its predictions. In certain applications with
-In fields like healthcare, explainability is essential for fostering trust among doctors and medical professionals. By providing clear and interpretable insights into how AI models make decisions, explainability helps clinicians understand and validate the reasoning behind predictions. This trust is critical for the successful integration of AI into clinical workflows.
+AI explainability refers to the ability of an AI model to provide clear, understandable reasons for its predictions. In certain applications within fields like healthcare, explainability is essential for fostering trust among doctors and medical professionals. By providing clear and interpretable insights into how AI models make decisions, explainability helps clinicians understand and validate the reasoning behind predictions. This trust is critical for the successful integration of AI into clinical workflows.
 
 Moreover, AI models have the potential to uncover subtle patterns in medical data that may not be immediately visible to even the most experienced doctors. In the example that we use, in skin cancer detection, AI could identify previously unseen features in dermatological images that correlate with specific conditions. Explainability techniques like LIME and GRAD-CAM allow doctors to visualize these patterns, possibly even bringing to light features that were previously ignored. This would both allow to improve diagnostic accuracy and aid doctors in making more informed decisions.
 
@@ -178,8 +177,19 @@ After processing through Swin Transformer blocks, the model generates hierarchic
 ## Methodology
 In the next section, we’ll dive into the methodology, including the datasets used, the models utilized, and how LIME and GRAD-CAM were applied to evaluate explainability. 
 
+### Dataset
+
+The **HAM10000 dataset**, was compiled to facilitate the development and evaluation of machine learning models for automated skin cancer diagnosis. The dataset's diversity is a key strength, stemming from its collection over 20 years from two geographically separate sources—the Medical University of Vienna and a Queensland skin cancer practice—thereby reflecting real-world clinical variability and enhancing the robustness of trained algorithms. Consequently, HAM10000 has become a benchmark for assessing the performance of both machine learning systems and human experts in skin lesion classification, significantly advancing research in automated skin cancer detection. Due to this we consider this to be an appropriate dataset to test skin cancer explainability for the skin cancer detection task.
+
+Comprising 10,015 dermatoscopic images, it encompasses seven distinct diagnostic categories: 
+melanocytic nevi, melanoma, benign keratosis-like lesions, basal cell carcinoma, actinic keratoses, vascular lesions, and dermatofibroma. The dataset offers a variety of fatures:  Each image, identified by image_id and representing a lesion with a unique lesion_id, is accompanied by its imagewidth in pixels. Diagnostic information is provided through dx (specific diagnosis) and dx_type (diagnosis method). Patient demographics include age (numerical), sex (categorical), and localization (lesion location), enhancing the dataset's utility for comprehensive machine learning model development. For this project, only the image and the diagnostic information were utilized. 
+
+This dataset was downloaded from [Huggingface][ham10kdataset] where it was uploaded by Daniel Low. 
+
+[ham10kdataset]: https://huggingface.co/datasets/marmal88/skin_cancer
+
 ### YOLOv8 (CNN)
-The YOLOv8 model utilized was initially trained on the COCO (Common Objects in Context) dataset and fine-tuned on the **HAM10000 dataset** by the user tamaraabuhawileh on [github][yolov8git]. The repository outlines the data preprocessing steps taken, including converting segmentation masks to bounding boxes, simplifying multi-class labels into binary labels (malignant/benign), balancing the dataset through down-sampling, and splitting the data into training, validation, and test sets. For a better understanding of the fine-tuning process please refer to the provided [link][yolov8git].
+The YOLOv8 model utilized was initially trained on the COCO (Common Objects in Context) dataset and fine-tuned using the **HAM10000 dataset** by the user tamaraabuhawileh on [github][yolov8git]. The repository outlines the data preprocessing steps taken, including converting segmentation masks to bounding boxes, simplifying multi-class labels into binary labels (malignant/benign), balancing the dataset through down-sampling, and splitting the data into training, validation, and test sets. For a better understanding of the fine-tuning process please refer to the provided [link][yolov8git].
 
 - **LIME Implementation**: We implemented SODEx (Saliency for Object Detection Explanation) as a technique that uses LIME (Local Interpretable Model-agnostic Explanations) to explain the predictions of YOLOv8. It fundamentally adapts LIME to handle the unique output format of object detection, which includes class probabilities and bounding box coordinates. Refer to the repository for a detailed [implementation][limeyolov8].
 
@@ -191,7 +201,7 @@ The YOLOv8 model utilized was initially trained on the COCO (Common Objects in C
 [gradcamv8]:https://github.com/ThePhilippeH/explainingCancerAI/blob/cnn/grad_cam_yolo.py
 
 ### ViT  
-The Vision Transformer (ViT) model used for this task was based on Google's ViT architecture with a 16×16 patch size, pre-trained on the ImageNet21k dataset. The classification head was modified to suit the skin cancer image classification task. The model was fine-tuned using the Skin Cancer Dataset uploaded by marmal88 on [Hugging Face][vitdataset], which includes 10,015 dermoscopic images spanning seven diagnostic categories.
+The Vision Transformer (ViT) model used for this task was based on Google's ViT architecture with a 16×16 patch size, pre-trained on the ImageNet21k dataset. The classification head was modified to suit the skin cancer image classification task. The model was fine-tuned using the **HAM10000 dataset** by marmal88 and uploaded on [Hugging Face][vitdataset].
 
 - **LIME implementation**: We implemented LIME using the **LIME-Py** library. The `LimeImageExplainer` was used with a custom segmentation function based on SLIC, and explanations were generated by perturbing the input and analyzing the model's response. Explanations were visualized by overlaying the LIME-generated mask onto the original image, highlighting the most influential regions.
 
@@ -206,23 +216,12 @@ The Vision Transformer (ViT) model used for this task was based on Google's ViT 
 The Swin Transformer model used was a model initially trained on the imagenet dataset and later fine-tuned on the **HAM10000 dataset**, which contains **10,015 dermoscopic images** of skin lesions. 
 The dataset includes seven diagnostic categories: melanoma, melanocytic nevus, basal cell carcinoma, actinic keratosis, benign keratosis, dermatofibroma, and vascular lesion. 
 We transformed these 7 categories into two main categories: Malignant and Benign. 
-The Swin Transformer was imported from **Hugging Face**. [LINKTOWHERETHEMODELISFROM][swinlink]
+The Swin Transformer finetuning was done by gianlab and imported from [Hugging face][swinlink].
 
 - **LIME implementation**: We implemented LIME using the **LIME-Py** library, which provides a simple and intuitive interface for generating explanations. The LIME-Py library allows us to create LIME explainer objects and generate explanations for individual predictions made by the Swin Transformer model.
 - **Grad-CAM implementation**: We applied the Grad-CAM technique to the Swin Transformer model using the **PyTorch** library. By extracting the gradients from the final convolutional layer of the Swin Transformer model, we were able to generate class activation maps that highlight the regions of the input image that were most important for the model's predictions.
 
-[swinlink]:  huggingface.com
-
-### Dataset
-
-The **HAM10000 dataset**, was compiled to facilitate the development and evaluation of machine learning models for automated skin cancer diagnosis. The dataset's diversity is a key strength, stemming from its collection over 20 years from two geographically separate sources—the Medical University of Vienna and a Queensland skin cancer practice—thereby reflecting real-world clinical variability and enhancing the robustness of trained algorithms. Consequently, HAM10000 has become a benchmark for assessing the performance of both machine learning systems and human experts in skin lesion classification, significantly advancing research in automated skin cancer detection. Due to this we consider this to be an appropriate dataset to test skin cancer explainability for the skin cancer detection task.
-
-Comprising 10,015 dermatoscopic images, it encompasses seven distinct diagnostic categories: 
-melanocytic nevi, melanoma, benign keratosis-like lesions, basal cell carcinoma, actinic keratoses, vascular lesions, and dermatofibroma. The dataset offers a variety of fatures:  Each image, identified by image_id and representing a lesion with a unique lesion_id, is accompanied by its imagewidth in pixels. Diagnostic information is provided through dx (specific diagnosis) and dx_type (diagnosis method). Patient demographics include age (numerical), sex (categorical), and localization (lesion location), enhancing the dataset's utility for comprehensive machine learning model development. For this project, only the image and the diagnostic information were utilized. 
-
-This dataset was downloaded from [Huggingface][ham10kdataset] where it was uploaded by Daniel Low. 
-
-[ham10kdataset]: https://huggingface.co/datasets/marmal88/skin_cancer
+[swinlink]:  https://huggingface.co/gianlab/swin-tiny-patch4-window7-224-finetuned-skin-cancer
 
 ## Results and Insights
 
