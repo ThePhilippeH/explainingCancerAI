@@ -299,15 +299,32 @@ In image 117, different methods show more varied behavior. YOLOv8 focuses well o
 
 
 ## Analysis
-(To be added after completing the analysis.)
+### Clear Cancer Results
 
+In cases where the cancer lesion is clearly visible, the Grad-CAM results demonstrate that YOLOv8 and ViT models can accurately highlight the lesion area. YOLOv8's Grad-CAM explanations are notably precise, focusing on the lesion with minimal noise. ViT also performs well, but its attention is more spread out, covering a larger area. Swin Transformers, on the other hand, show some sensitivity to noise, highlighting irrelevant features along with the lesion.
 
+LIME explanations for clear cancer images reveal that YOLOv8 and Swin Transformers can capture fine-grained details, while ViT tends to focus on broader regions. This suggests that YOLOv8 and Swin Transformers are better at localizing specific features, whereas ViT provides a more general overview.
+
+### Unclear Cancer Results
+
+For images where the cancer lesion is not obviously cancerous, the Grad-CAM results indicate that YOLOv8 and ViT can still identify the lesion area, although ViT's attention is more diffused. Swin Transformers struggle more with noise, highlighting irrelevant features.
+
+LIME explanations for unclear cancer images show that all models are affected by noise, but YOLOv8 and Swin Transformers still manage to capture some relevant areas. ViT's explanations are less reliable in these cases, as the perturbations seem to confuse the model.
+
+### One Method Performs Better Than the Other
+
+In cases where one method performs better than the other, the results highlight the strengths and weaknesses of each model. YOLOv8 consistently provides precise and focused explanations, making it reliable for localizing lesions. ViT's global attention mechanism makes it effective for identifying broader patterns but less reliable for fine details. Swin Transformers balance between the two, capturing both structure and local variations, but sometimes get distracted by irrelevant features.
 
 ## Conclusion
 
 Ths study compared the explainability of YOLOv8, ViT, and Swin Transformers in skin cancer detection using Grad-CAM and LIME. The results show that YOLOv8 delivers precise and focused explanations, particularly strong in localizing lesions and resisting noise. ViT tends to highlight broader regions due to its global attention, making it effective for coarse patterns but less reliable for fine details. Swin strikes a balance between the two, capturing both structure and local variations, though sometimes distracted by irrelevant features.
 
 Grad-CAM generally produced more consistent spatial explanations, while LIME revealed each model’s sensitivity to perturbations. These findings suggest that model and method selection should be guided by clinical needs—whether prioritizing fine-grained localization or overall lesion structure. No single approach is best in all cases, and combining multiple models or explanation tools may offer more robust support in medical AI applications.
+
+## Discussion
+The results provide valuable insights into the explainability of three different deep learning architectures for skin cancer detection. The differences in performance across models and explainability methods highlight the importance of selecting the right approach based on the specific requirements of the task at hand.
+One thing that should be mentioned is the bias of the dataset used. The HAM10000 dataset is a well-known benchmark for skin cancer detection, but it does not fully represent the diversity of real-world cases. Particularly it does not inculde any images with different skin hues.  Future work could involve testing these models on more diverse datasets to assess their generalizability and robustness to other types of skin.
+
 
 ## References
 - [LIME Paper](https://arxiv.org/abs/1602.04938)
