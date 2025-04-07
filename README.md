@@ -231,9 +231,9 @@ The results have been subdivided into a series of partitions of interest for in 
 
 ### Accuracy of models utilized
  
-| Metric | YoloV8 | ViT | SWIN |
-|----------|----------|----------|----------|
-| Accuracy   | 0.8342     | Data     | Data     |
+| Metric | YoloV8 | ViT | SWIN   |
+|----------|----------|----------|--------|
+| Accuracy   | 0.8342     | Data     | 0.8233 |
 
 
 ### Clear Cancer Results
