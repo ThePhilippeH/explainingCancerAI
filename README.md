@@ -33,7 +33,9 @@ Convolutional Neural Networks (CNNs) form the backbone of YOLOv8 by extracting s
 - **Residual Connections** – Improve gradient flow, making training more efficient.
 
 
+YOLOv8 features a modular architecture with three core components: the backbone, neck, and head. **The backbone**, including CSPDarkNet53, C2f, and SPPF, extracts rich features from the input image efficiently. **The neck**, composed of PANet and BiFPN, fuses features across layers to enhance object detection, especially for smaller objects. Finally, the **prediction head** uses anchor-free and decoupled detection methods to improve both speed and accuracy in identifying and localizing objects.
 
+<!-- 
 YOLOv8 follows a modular design consisting of three main components:  
 
 ##### **a. Backbone (Feature Extraction)**  
@@ -50,7 +52,7 @@ The neck aggregates and refines feature maps from different layers for better ob
 ##### **c. Head (Prediction & Decoding)**  
 The prediction head is responsible for detecting objects in the image. Key improvements in YOLOv8 include:  
 - **Anchor-Free Detection** – Eliminates predefined anchor boxes, making detection faster and more flexible.  
-- **Decoupled Detection Head** – Separates classification and localization tasks, leading to better accuracy.  
+- **Decoupled Detection Head** – Separates classification and localization tasks, leading to better accuracy.   -->
 
 ![alt text](./images_report//image_yolov8_architecture.png)
 
@@ -68,7 +70,7 @@ The core components of ViTs include:
 - **Multi-Head Self-Attention (MHSA)** – Captures global dependencies between image regions.  
 - **Feedforward Network (FFN)** – Applies transformations and non-linearities to enhance feature learning.  
 - **Layer Normalization & Residual Connections** – Stabilizes training and improves gradient flow.  
-
+<!-- 
 ViTs follow a modular design consisting of three main components:  
 
 ##### **a. Patch Embedding & Tokenization**  
@@ -86,7 +88,7 @@ The core of ViTs is the **stacked Transformer encoder**, inspired by NLP models 
 ##### **c. Classification & Output Head**  
 After processing through multiple transformer blocks, the model uses the **class token** for final prediction. This step involves:  
 - **MLP Head** – A simple fully connected layer that maps the class token representation to output categories.  
-- **Softmax Activation** – Converts logits into class probabilities.  
+- **Softmax Activation** – Converts logits into class probabilities.   -->
 
 ![alt text](./images_report/vit_architecture.png)
 
@@ -101,7 +103,7 @@ The core components of Swin Transformers include:
 - **Shifted Window Multi-Head Self-Attention (SW-MHSA)** – Applies self-attention within **local** windows while allowing cross-window interactions.  
 - **Feedforward Network (FFN)** – Enhances feature transformations using non-linearity.  
 - **Layer Normalization & Residual Connections** – Stabilizes training and ensures better gradient flow.  
-
+<!-- 
 Swin Transformers follow a modular design consisting of three main components:  
 
 ##### **a. Patch Embedding & Hierarchical Feature Learning**  
@@ -121,7 +123,7 @@ The Swin Transformer stack replaces traditional **global self-attention** with *
 After processing through Swin Transformer blocks, the model generates hierarchical feature representations that are used for classification or other vision tasks.  
 - **Global Average Pooling (GAP)** – Pools feature maps for classification.  
 - **Fully Connected Layer (MLP Head)** – Maps the final representation to output categories.  
-- **Softmax Activation** – Converts logits into probabilities for classification tasks.  
+- **Softmax Activation** – Converts logits into probabilities for classification tasks.   -->
 
 
 ![alt text](./images_report/swin_architecture.png)
@@ -291,30 +293,9 @@ In image 117, different methods show more varied behavior. YOLOv8 focuses well o
 
 
 ## Analysis
-
-### Clear Cancer Results
-
-In cases where the cancer lesion is clearly visible, the Grad-CAM results demonstrate that YOLOv8 and ViT models can accurately highlight the lesion area. YOLOv8's Grad-CAM explanations are notably precise, focusing on the lesion with minimal noise. ViT also performs well, but its attention is more spread out, covering a larger area. Swin Transformers, on the other hand, show some sensitivity to noise, highlighting irrelevant features along with the lesion.
-
-LIME explanations for clear cancer images reveal that YOLOv8 and Swin Transformers can capture fine-grained details, while ViT tends to focus on broader regions. This suggests that YOLOv8 and Swin Transformers are better at localizing specific features, whereas ViT provides a more general overview.
-
-### Unclear Cancer Results
-
-For images where the cancer lesion is not obviously cancerous, the Grad-CAM results indicate that YOLOv8 and ViT can still identify the lesion area, although ViT's attention is more diffused. Swin Transformers struggle more with noise, highlighting irrelevant features.
-
-LIME explanations for unclear cancer images show that all models are affected by noise, but YOLOv8 and Swin Transformers still manage to capture some relevant areas. ViT's explanations are less reliable in these cases, as the perturbations seem to confuse the model.
-
-### One Method Performs Better Than the Other
-
-In cases where one method performs better than the other, the results highlight the strengths and weaknesses of each model. YOLOv8 consistently provides precise and focused explanations, making it reliable for localizing lesions. ViT's global attention mechanism makes it effective for identifying broader patterns but less reliable for fine details. Swin Transformers balance between the two, capturing both structure and local variations, but sometimes get distracted by irrelevant features.
-
-### Overall Comparison
-
-Grad-CAM generally produces more consistent spatial explanations across all models, while LIME reveals each model's sensitivity to perturbations. YOLOv8 excels in localizing lesions and resisting noise, making it suitable for detailed analysis. ViT is effective for coarse patterns and overall structure but struggles with fine details. Swin Transformers offer a balanced approach, capturing both global and local features, though they can be sensitive to noise.
+(To be added after completing the analysis.)
 
 
-### Dataset Considerations
-The HAM10000 dataset is a well-structured and diverse dataset that provides a solid foundation for training and evaluating skin cancer detection models. However, it is important to note that the dataset does not correctly represent all types of skin hues and lesions. This can lead to biases in model performance, particularly for underrepresented skin tones or lesion types. The dataset's inherent limitations may affect the generalizability of the models and their explanations, as they may not perform equally well across all demographic groups.
 
 ## Conclusion
 
