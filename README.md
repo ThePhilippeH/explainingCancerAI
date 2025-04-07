@@ -229,6 +229,13 @@ The Swin Transformer finetuning was done by gianlab and imported from [Hugging f
 
 The results have been subdivided into a series of partitions of interest for in depth comparison and analysis. We chose for a set of clearly visible lesion, one with a lesion that is barely visible, as well as results where one method performs better than the other. This is to show whether some methods are better at explaining certain types of images than others.
 
+### Accuracy of models utilized
+ 
+| Metric | YoloV8 | ViT | SWIN |
+|----------|----------|----------|----------|
+| Accuracy   | 0.8342     | Data     | Data     |
+
+
 ### Clear Cancer Results
 The first results we choose to present partain a classic example of skin cancer where the lesion is clearly visible even to the untrained eye.
 
