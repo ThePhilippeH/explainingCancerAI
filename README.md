@@ -237,7 +237,7 @@ The results have been subdivided into a series of partitions of interest for in 
 
 
 ### Clear Cancer Results
-The first results we choose to present partain a classic example of skin cancer where the lesion is clearly visible even to the untrained eye.
+The first results we choose to present pertain a classic example of skin cancer where the lesion is clearly visible even to the untrained eye.
 
 
 | **Image** | **Original** | **CNN (YOLOv8)** | **ViT** | **Swin Transformer** |
@@ -251,7 +251,7 @@ As can be seen in the table above, the models and explainers behave very differe
 We chose these two images to highlight the important differences between the models and explainers. 
 We chose a picture containing more hair and a picture with no hair, to see if the models would be able to still explain the differences properly, and not simply based on noise.
 
-The first image already shows clear divergence, especially in the Grad-CAM, it cleary distinguishes the lesion from the rest of the skin, while the other models also detect other areas as explanation. This is supported by the LIME explanation of this image, where it clearly distinguishes the lesion. 
+The first image already shows clear divergence, especially in the Grad-CAM, it clearly distinguishes the lesion from the rest of the skin, while the other models also detect other areas as explanation. This is supported by the LIME explanation of this image, where it clearly distinguishes the lesion. 
 
 The second image shows a similar pattern for the Grad-CAM example, but diverges in the LIME explanation, where it does not clearly marks the lesion from the rest of the skin. 
 
@@ -271,11 +271,11 @@ Similar to the previous section, two images are chosen that represent two differ
 
 When analysing the clean image (208) we can see clear differences between the performance of the explainability methods. Grad-Cam seems to very clearly show the attention hotspots for both YOLOv8 and for ViT. Both pinpoint the left part of the lesion as being an indicator of cancer. Interestingly, ViT seems to also focus very heavily on the right most part of the lesion, where YOLOv8 seems to indicate the countour of the lesion. SWIN seems to struggle to find the correct area of the lesion specifically and also divides its attention towards many other small changes in hue within the image (normal skin variations) This lack of focus for SWIN is to be expected to some extend given the fine grained nature of its attention.
 
-In terms of LIME explenations for the clean image (208), we see that perturbing the model seems that perturbation create many different possible areas of focus for all models. Of interest are how both SWIN and YOLOv8 seem to capture part of the lesion in one of these areas (the previously discussed right lesion also heavily emphasized by ViT with Grad-Cam). Perturbing the image for ViT seems to make it loose any track of where the lesion is exactly, this may be expected due to the general nature of its attention mechanism. 
+In terms of LIME explanations for the clean image (208), we see that perturbing the model seems that perturbation create many different possible areas of focus for all models. Of interest are how both SWIN and YOLOv8 seem to capture part of the lesion in one of these areas (the previously discussed right lesion also heavily emphasized by ViT with Grad-Cam). Perturbing the image for ViT seems to make it lose any track of where the lesion is exactly, this may be expected due to the general nature of its attention mechanism. 
 
-When analysing the noisy image (210), particularly with Grad-Cam, we see a very similar explenation area from all three models albeit in completely different modalities. YOLOv8 seems to explain the area of interest in a classical way, where the highes attention is drawn to the area of lesion, correctly ignoring all the noise (hair). ViT also highlights the are of interst but in an inverted manner, the attention is drawn to everything else except for the lesion, thus giving a negative demarcation of the area of the lesion. Finally SWIN seems to have some hotspots around some hairs yet finds an area of interest (left most area) that corresponds to the lesion being analysed.
+When analysing the noisy image (210), particularly with Grad-Cam, we see a very similar explenation area from all three models albeit in completely different modalities. YOLOv8 seems to explain the area of interest in a classical way, where the highest attention is drawn to the area of lesion, correctly ignoring all the noise (hair). ViT also highlights the area of interst but in an inverted manner, the attention is drawn to everything else except for the lesion, thus giving a negative demarcation of the area of the lesion. Finally SWIN seems to have some hotspots around some hairs yet finds an area of interest (left most area) that corresponds to the lesion being analysed.
 
-Finally in terms of LIME explenations for the noisy image (210) we see that the perturbation of the image in addition to the inherent noise of hair, completely confuses the models accross the board. Some small overalps with the lesions can be seen, yet no one area demarcates any relevant or substantial portion of the lesion in question.
+Finally in terms of LIME explanations for the noisy image (210) we see that the perturbation of the image in addition to the inherent noise of hair, completely confuses the models across the board. Some small overlaps with the lesions can be seen, yet no one area demarcates any relevant or substantial portion of the lesion in question.
 
 
 ### One method performs better than the other
@@ -313,17 +313,17 @@ LIME explanations for unclear cancer images show that all models are affected by
 
 ### One Method Performs Better Than the Other
 
-In cases where one method performs better than the other, the results highlight the strengths and weaknesses of each model. YOLOv8 consistently provides precise and focused explanations, making it reliable for localizing lesions. ViT's global attention mechanism makes it effective for identifying broader patterns but less reliable for fine details. Swin Transformers balance between the two, capturing both structure and local variations, but sometimes get distracted by irrelevant features.
+In cases where one method performs better than the other, the results highlight the strengths and weaknesses of each model. YOLOv8 consistently provides precise and focused explanations, making it reliable for localizing lesions and showing stable interpretablity. ViT's global attention mechanism makes it effective for identifying broader patterns but less reliable for fine details. Swin Transformers balance between the two, capturing both structure and local variations, identifying surprisingly fine details in low noise situation, but sometimes get distracted by irrelevant features.
 
 ## Conclusion
 
-Ths study compared the explainability of YOLOv8, ViT, and Swin Transformers in skin cancer detection using Grad-CAM and LIME. The results show that YOLOv8 delivers precise and focused explanations, particularly strong in localizing lesions and resisting noise. ViT tends to highlight broader regions due to its global attention, making it effective for coarse patterns but less reliable for fine details. Swin strikes a balance between the two, capturing both structure and local variations, though sometimes distracted by irrelevant features.
+This study compared the explainability of YOLOv8, ViT, and Swin Transformers in skin cancer detection using Grad-CAM and LIME. The results show that YOLOv8 delivers precise and focused explanations, particularly strong in localizing lesions and resisting noise. ViT tends to highlight broader regions due to its global attention, making it effective for coarse patterns but less reliable for fine details. Swin strikes a balance between the two, capturing both structure and local variations, though sometimes distracted by irrelevant features.
 
 Grad-CAM generally produced more consistent spatial explanations, while LIME revealed each model’s sensitivity to perturbations. These findings suggest that model and method selection should be guided by clinical needs—whether prioritizing fine-grained localization or overall lesion structure. No single approach is best in all cases, and combining multiple models or explanation tools may offer more robust support in medical AI applications.
 
 ## Discussion
 The results provide valuable insights into the explainability of three different deep learning architectures for skin cancer detection. The differences in performance across models and explainability methods highlight the importance of selecting the right approach based on the specific requirements of the task at hand.
-One thing that should be mentioned is the bias of the dataset used. The HAM10000 dataset is a well-known benchmark for skin cancer detection, but it does not fully represent the diversity of real-world cases. Particularly it does not inculde any images with different skin hues.  Future work could involve testing these models on more diverse datasets to assess their generalizability and robustness to other types of skin.
+One thing that should be mentioned is the bias of the dataset used. The HAM10000 dataset is a well-known benchmark for skin cancer detection, but it does not fully represent the diversity of real-world cases. Particularly it does not include any images with different skin hues.  Future work could involve testing these models on more diverse datasets to assess their generalizability and robustness to other types of skin.
 
 
 ## References
