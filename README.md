@@ -58,7 +58,7 @@ The prediction head is responsible for detecting objects in the image. Key impro
 
 
 
-#### 1. Vision Transformers (ViTs)  
+#### 2. Vision Transformers (ViTs)  
 
 Vision Transformers (ViTs) are a deep learning architecture designed for image recognition tasks, leveraging the **self-attention mechanism** instead of convolutions to process visual data. Unlike CNNs, which extract features using spatial hierarchies, ViTs **divide an image into fixed-size patches** and process them as a sequence of tokens.  
 
@@ -91,7 +91,7 @@ After processing through multiple transformer blocks, the model uses the **class
 
 ![alt text](./images_report/vit_architecture.png)
 
-#### 1. Swin Transformers  
+#### 3. Swin Transformers  
 
 Swin Transformers (Shifted Window Transformers) are an advanced vision transformer architecture designed to improve computational efficiency and scalability. Unlike standard Vision Transformers (ViTs), which apply **global self-attention** across the entire image, Swin Transformers introduce **hierarchical feature maps** and **shifted window attention**, making them more suitable for dense vision tasks like object detection and segmentation.  
 
@@ -233,7 +233,7 @@ The results have been subdivided into a series of partitions of interest for in 
  
 | Metric | YoloV8 | ViT | SWIN   |
 |----------|----------|----------|--------|
-| Accuracy   | 0.8342     | Data     | 0.8233 |
+| Accuracy   | 0.8342     | 0.8840     | 0.8233 |
 
 
 ### Clear Cancer Results
